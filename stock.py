@@ -5,12 +5,10 @@ from validation import quantities
 
 class Stock:
     """Store one bakery's ingredient quantities."""
-    _shared = {k: item.capacity for k, item in INGREDIENTS.items()}
-
     def __init__(self, initial=None):
         values = {k: item.capacity for k, item in INGREDIENTS.items()} if initial is None else initial
         if initial is None:
-            self.quantities = self._shared
+            self.quantities = {k: item.capacity for k, item in INGREDIENTS.items()}
         else:
             self.quantities = quantities(values, INGREDIENTS, "stock")
         if any(self.quantities[k] > INGREDIENTS[k].capacity for k in INGREDIENTS):
