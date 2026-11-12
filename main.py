@@ -62,6 +62,8 @@ def interactive():
             display_weekly_summary(bakery.step(decision, demand))
         except ValueError as error:
             print(f"Decision rejected: {error}. Replace the decision for this week.")
+        # print("===checking history weekly==")
+        # print(bakery.get_history())
     return bakery
 
 
