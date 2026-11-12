@@ -80,7 +80,7 @@ class Bakery:
             "purchases_cost": purchases_cost, "sales": sales,
             "opening_stock": opening_stock, "consumed": consumed,
             "discarded": discarded, "purchased": purchased,
-            "closing_stock": self.stock.quantities, "minutes_used": minutes,
+            "closing_stock": dict(self.stock.quantities), "minutes_used": minutes,
             "bankrupt": bankrupt,
         }
         self._history.append(record)
