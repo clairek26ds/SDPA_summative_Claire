@@ -51,7 +51,10 @@ class Bakery:
         if minutes > workforce * 600:
             raise ValueError("insufficient labour")
         remaining = {k: opening_stock[k] - consumed[k] for k in INGREDIENTS}
-        self.stock.update(remaining)
+        # temporary variable for stock update in case of rejection later
+        temp_stock = deepcopy(self.stock) 
+        temp_stock.update(remaining) 
+
         revenue = sum(PRODUCTS[p].price * sales[p] for p in PRODUCTS)
         wages = workforce * self.COST_PER_WORKER if revenue else 0
         rent = self.WEEKLY_RENT
@@ -61,7 +64,8 @@ class Bakery:
         purchased = dict.fromkeys(INGREDIENTS, 0)
         purchases_cost = 0
         if not bankrupt:
-            discarded = self.stock.discarded(remaining)
+            # updating discarded based on the temporary stock update
+            discarded = temp_stock.discarded(remaining) 
             remaining = {k: remaining[k] - discarded[k] for k in INGREDIENTS}
             if any(remaining[k] + purchases[k] > INGREDIENTS[k].capacity for k in INGREDIENTS):
                 raise ValueError("purchase exceeds capacity")
@@ -70,9 +74,12 @@ class Bakery:
                 raise ValueError("purchase is unaffordable")
             purchased = purchases
             remaining = {k: remaining[k] + purchased[k] for k in INGREDIENTS}
+
+        # commit changes only after all rejection checks have passed
+        temp_stock.update(remaining) 
+        self.stock = temp_stock         
         opening_cash = self._cash
         self._cash = cash_after_charges - purchases_cost
-        self.stock.update(remaining)
         self.bankrupt = bankrupt
         record = {
             "week": self.week, "opening_cash": opening_cash, "closing_cash": self._cash,

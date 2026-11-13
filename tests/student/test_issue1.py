@@ -38,4 +38,3 @@ class TestIssue(unittest.TestCase):
 
         # Changing the first object should not change the second
         self.assertNotEqual(b1_stock.quantities, b2_stock.quantities)
-
