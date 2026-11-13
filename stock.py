@@ -1,7 +1,7 @@
 """Ingredient stock and weekly losses."""
 from ingredient import INGREDIENTS
 from validation import quantities
-
+from math import ceil
 
 class Stock:
     """Store one bakery's ingredient quantities."""
@@ -23,5 +23,5 @@ class Stock:
         """Return the whole units lost, rounded upwards."""
         discarded = {}
         for ingredient in INGREDIENTS:
-            discarded[ingredient] = (remaining[ingredient] * INGREDIENTS[ingredient].loss_percentage) // 100
+            discarded[ingredient] = ceil((remaining[ingredient] * INGREDIENTS[ingredient].loss_percentage) / 100)
         return discarded

@@ -56,10 +56,10 @@ class Bakery:
         temp_stock.update(remaining) 
 
         revenue = sum(PRODUCTS[p].price * sales[p] for p in PRODUCTS)
-        wages = workforce * self.COST_PER_WORKER if revenue else 0
+        wages = workforce * self.COST_PER_WORKER
         rent = self.WEEKLY_RENT
         cash_after_charges = self._cash + revenue - wages - rent
-        bankrupt = cash_after_charges <= 0
+        bankrupt = cash_after_charges < 0
         discarded = dict.fromkeys(INGREDIENTS, 0)
         purchased = dict.fromkeys(INGREDIENTS, 0)
         purchases_cost = 0
