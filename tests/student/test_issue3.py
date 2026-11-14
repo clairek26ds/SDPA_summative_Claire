@@ -14,12 +14,13 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(stock.discarded(remaining), expected)
 
     def test_closing_cash_for_no_sales(self):
+        bakery = Bakery()
+
         decision1 = {"workforce": 1,
                      "sales":{"loaf":0, "bun":0, "slice":0},
                      "purchases":{"flour":0, "butter":0, "fruit":0}}
         demand1 = {"loaf":1, "bun":0, "slice":0}
 
-        bakery = Bakery()
         expected_closing_cash  = (bakery.get_cash()
                                   - bakery.WEEKLY_RENT 
                                   - bakery.COST_PER_WORKER * decision1["workforce"]
@@ -29,13 +30,13 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(bakery.get_cash(), expected_closing_cash)
 
     def test_if_cash_zero_bankrupt(self):
+        bakery = Bakery(initial_cash=15000)
+
         decision1 = {"workforce": 1,
                      "sales":{"loaf":0, "bun":0, "slice":0},
                      "purchases":{"flour":0, "butter":0, "fruit":0}}
         demand1 = {"loaf":1, "bun":0, "slice":0}
 
-        bakery = Bakery()
-        bakery._cash = 15000
         bakery.step(decision1, demand1)
 
         self.assertEqual(bakery.bankrupt, False)
