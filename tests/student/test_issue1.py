@@ -22,16 +22,35 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(bakery.get_history()[0]["closing_stock"], original_closing_stock)
 
 
-    def test_sharing_stock(self):
+    def test_sharing_stock_update_function(self):
         initial_stock = {i: n.capacity for i, n in INGREDIENTS.items()}
 
+        # test1 (comparing direct stock update results)
         b1_stock = Stock()
         remaining = {"flour": 500, "butter": 200, "fruit": 100}
         b1_stock.update(remaining)
 
-        # Creating a new bakery which is supposed to have a initial full stock
+        # test1: Creating a new bakery which is supposed to have a initial full stock
         b2_stock = Stock()
         self.assertEqual(b2_stock.quantities, initial_stock)
 
-        # Changing the first object should not change the second
+        # test1: stock update of the first object should not change the second
         self.assertNotEqual(b1_stock.quantities, b2_stock.quantities)
+
+    def test_sharing_stock_step_function(self):
+        initial_stock = {i: n.capacity for i, n in INGREDIENTS.items()}
+        
+        # test2 (comparing stock update through step function)
+        bakery3 = Bakery()
+        decision = {"workforce": 1,
+                    "sales":{"loaf":1, "bun":0, "slice":0},
+                    "purchases":{"flour":0, "butter":0, "fruit":0}}
+        demand = {"loaf":1, "bun":0, "slice":0}
+        bakery3.step(decision, demand)
+
+        # test2: Creating a new bakery which is supposed to have a initial full stock
+        bakery4 = Bakery()
+        self.assertEqual(bakery4.get_stock(), initial_stock)
+
+        # test2: stock change of bakery3 from Bakery.step() doens't affect bakery4
+        self.assertNotEqual(bakery3.get_stock(), bakery4.get_stock())

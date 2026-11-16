@@ -45,8 +45,8 @@ class Bakery:
         consumed = {k: sum(PRODUCTS[p].quantity_for(INGREDIENTS[k]) * sales[p] for p in PRODUCTS)
                     for k in INGREDIENTS}
         minutes = sum(PRODUCTS[p].minutes * sales[p] for p in PRODUCTS)
-        if any(PRODUCTS[p].quantity_for(INGREDIENTS[k]) * sales[p] > opening_stock[k]
-               for p in PRODUCTS for k in INGREDIENTS):
+        # changed to compare dicisions with the overall amount of ingredients required rather than with individual products
+        if any(consumed[k] > opening_stock[k] for k in INGREDIENTS):
             raise ValueError("insufficient ingredients")
         if minutes > workforce * 600:
             raise ValueError("insufficient labour")
