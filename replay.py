@@ -15,16 +15,17 @@ def from_scenario(scenario):
     """Validate a scenario and return a fresh bakery and copied demands."""
     if not isinstance(scenario, dict):
         raise ValueError("scenario must be an object")
-    allowed = {"duration", "demands", "initial_cash", "initial_stock"}
-    if set(scenario) - allowed or not {"duration", "demands"} <= set(scenario):
+    allowed = {"orders", "duration", "demands", "initial_cash", "initial_stock"}
+    if set(scenario) - allowed or not {"duration", "demands", "orders"} <= set(scenario):
         raise ValueError("invalid scenario fields")
+    orders = scenario["orders"]
     duration = integer(scenario["duration"], "duration", 1, 12)
     demands = scenario["demands"]
     if not isinstance(demands, list) or len(demands) != duration:
         raise ValueError("one demand object is required for each week")
     demands = [quantities(d, PRODUCTS, "demand", 200) for d in demands]
     bakery = Bakery(duration, scenario.get("initial_cash", 100000),
-                    scenario.get("initial_stock"))
+                    scenario.get("initial_stock"), orders)
     return bakery, demands
 
 
