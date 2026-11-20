@@ -3,7 +3,17 @@
       "id": "A", 
       "product_id": "loaf", 
       "quantity": 5, 
-      "collection_week": 1}
+      "collection_week": 1},
+      {
+      "id": "B", 
+      "product_id": "loaf", 
+      "quantity": 5, 
+      "collection_week": 4},
+      {
+      "id": "C", 
+      "product_id": "slice", 
+      "quantity": 5, 
+      "collection_week": 2}
     ], 
   "duration": 6,
   "demands": [

@@ -18,6 +18,8 @@ def from_scenario(scenario):
     allowed = {"orders", "duration", "demands", "initial_cash", "initial_stock"}
     if set(scenario) - allowed or not {"duration", "demands"} <= set(scenario):
         raise ValueError("invalid scenario fields")
+    if "orders" in scenario and not isinstance(scenario["orders"], list):
+        raise ValueError("orders must be a list")
     duration = integer(scenario["duration"], "duration", 1, 12)
     demands = scenario["demands"]
     if not isinstance(demands, list) or len(demands) != duration:

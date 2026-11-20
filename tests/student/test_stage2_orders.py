@@ -1,6 +1,6 @@
 import unittest
 from bakery import Bakery
-# from order import Order
+from replay import load_json, replay
 from orderbook import OrderBook
 
 class TestIssue(unittest.TestCase):
@@ -242,7 +242,7 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(bakery.get_history(), initial_history)
 
 
-    def test_no_orders_(self):
+    def test_no_orders(self):
         # Bakery with no order which is same as stage1 condition
         bakery = Bakery()
         # checking there is no order attributes
@@ -264,3 +264,16 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(record["sales"]["slice"], 10)
         self.assertEqual(record["fulfilled_order_ids"], [])
         self.assertEqual(record["missed_order_ids"], [])
+
+    def test_no_orders_json(self):
+        # running Bakery with no order with json file
+        scenario = load_json("data/example.json")
+        decisions = load_json("data/example_decisions.json")  
+
+        bakery_record = replay(scenario, decisions)
+
+        for record in bakery_record:
+            self.assertEqual(record["fulfilled_order_ids"], [])
+            self.assertEqual(record["missed_order_ids"], [])
+            self.assertEqual(record["order_revenue"], 0)
+            self.assertEqual(record["walk_in_revenue"], record["revenue"])

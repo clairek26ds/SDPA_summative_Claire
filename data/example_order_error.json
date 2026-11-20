@@ -1,0 +1,41 @@
+{"orders" : [
+    {
+      "id": "A", 
+      "product_id": "loaf", 
+      "quantity": 500, 
+      "collection_week": 2}
+    ], 
+  "duration": 6,
+  "demands": [
+    {
+      "loaf": 100,
+      "bun": 80,
+      "slice": 60
+    },
+    {
+      "loaf": 100,
+      "bun": 80,
+      "slice": 60
+    },
+    {
+      "loaf": 100,
+      "bun": 80,
+      "slice": 60
+    },
+    {
+      "loaf": 100,
+      "bun": 80,
+      "slice": 60
+    },
+    {
+      "loaf": 100,
+      "bun": 80,
+      "slice": 60
+    },
+    {
+      "loaf": 100,
+      "bun": 80,
+      "slice": 60
+    }
+  ]
+}

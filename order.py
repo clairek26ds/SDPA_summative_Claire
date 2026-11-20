@@ -7,7 +7,7 @@ class Order:
     def __init__(self, id, product_id, quantity, collection_week):
         if not isinstance(id, str) or not id or id != id.strip():
             raise ValueError("Invalid order ID")
-        if product_id not in PRODUCTS:
+        if not isinstance(product_id, str) or product_id not in PRODUCTS:
             raise ValueError("Unknown product")
         self.id = id
         self.product_id = product_id
