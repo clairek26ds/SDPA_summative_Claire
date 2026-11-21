@@ -1,20 +1,30 @@
 # Component 1 -- Community Bakery Simulation
 This project simulates a bakry business process with orders, sales, purchases over a chosen number of weeks.
 
+## Development history
 
-# Running the tests
+Stage 1 repairs and regression tests were committed to the main branch
+and tagged as `stage1-complete`.
 
-Stage 1
+Stage 2 development continued on a separate branch from the tagged
+commit. Additional docstrings and PEP 8 formatting improvements were
+made to the Stage 1 test files during Stage 2 without moving the
+original tag.
 
+## Running the tests
+
+Interactive mode
+
+python3 main.py
+
+<Stage 1>
 python3 -m unittest discover -s tests -v
 
 JSON replay mode
 
 python3 main.py --scenario data/example.json --decisions data/example_decisions.json --output output/run.json
 
-
-Stage 2
-
+<Stage 2>
 python3 -m unittest discover -s tests_stage2 -v
 
 JSON replay mode
