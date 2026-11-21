@@ -25,7 +25,7 @@ class Bakery:
         self.order_book = OrderBook(orders, self.duration)
 
     def can_fulfil(self, order, temp_stock, temp_minutes):
-        """Whether current stock and minutes can fulfil the order"""
+        """check whether the current stock and minutes can fulfil the order and return used stocks and minutes if possible"""
         product = PRODUCTS[order.product_id]
         consumed_each = {k: product.quantity_for(INGREDIENTS[k]) * order.quantity
                     for k in INGREDIENTS}

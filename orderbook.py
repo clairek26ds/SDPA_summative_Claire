@@ -3,6 +3,7 @@ from order import Order
 from validation import integer
 
 class OrderBook:
+    """check inputs and return the list of orders"""
     def __init__(self, records, duration):   
         if not isinstance(records, list):
             raise ValueError("records need to be a list")
@@ -25,6 +26,7 @@ class OrderBook:
         self.orders = validated_orders
 
     def due_orders(self, week):
+        """return the sorted list of due orders on the each week"""
         due_orders = [
             order for order in self.orders
             if order.collection_week == week

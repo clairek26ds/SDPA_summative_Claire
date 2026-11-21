@@ -4,12 +4,17 @@ from stock import Stock
 from ingredient import INGREDIENTS
 
 class TestIssue(unittest.TestCase):
+    """Test stock independence and historical stock records"""
+
     def test_history_closing_stock(self):
+        """verifying later trading weeks do not alter previous closing records"""
         bakery = Bakery()
 
-        decision = {"workforce": 1,
-                     "sales":{"loaf":1, "bun":0, "slice":0},
-                     "purchases":{"flour":0, "butter":0, "fruit":0}}
+        decision = {
+                "workforce": 1,
+                "sales":{"loaf":1, "bun":0, "slice":0},
+                "purchases":{"flour":0, "butter":0, "fruit":0}
+        }
         demand = {"loaf":1, "bun":0, "slice":0}
         week1 = bakery.step(decision, demand)
 
@@ -23,6 +28,7 @@ class TestIssue(unittest.TestCase):
 
 
     def test_sharing_stock_update_function(self):
+        """verify that updating one Stock object doesn't affect another"""
         initial_stock = {i: n.capacity for i, n in INGREDIENTS.items()}
 
         # test1 (comparing direct stock update results)
@@ -38,13 +44,16 @@ class TestIssue(unittest.TestCase):
         self.assertNotEqual(b1_stock.quantities, b2_stock.quantities)
 
     def test_sharing_stock_step_function(self):
+        """Verify that trading in one bakery doesn't change the stock of another one"""
         initial_stock = {i: n.capacity for i, n in INGREDIENTS.items()}
         
         # test2 (comparing stock update through step function)
         bakery3 = Bakery()
-        decision = {"workforce": 1,
-                    "sales":{"loaf":1, "bun":0, "slice":0},
-                    "purchases":{"flour":0, "butter":0, "fruit":0}}
+        decision = {
+                "workforce": 1,
+                "sales":{"loaf":1, "bun":0, "slice":0},
+                "purchases":{"flour":0, "butter":0, "fruit":0}
+        }
         demand = {"loaf":1, "bun":0, "slice":0}
         bakery3.step(decision, demand)
 

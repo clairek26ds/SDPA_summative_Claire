@@ -4,8 +4,10 @@ from stock import Stock
 from ingredient import INGREDIENTS
 
 class TestIssue(unittest.TestCase):
+    """Test ingredient losses, weekly accounting and bankruptcy conditions."""
 
     def test_discarding_ingredients(self):
+        """Verify that ingredient losses are calculated and rounded upwards correctly."""
         # checking the amount of discard
         stock1 = Stock()
         remaining1 = {"flour": 105, "butter": 105, "fruit": 105}
@@ -14,6 +16,7 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(stock1.discarded(remaining1), expected1)
 
     def test_discarding_small_amountof_ingredients(self):
+        """veryfy that loss rounding is caculated correctly for small quantity"""
         # checking small number of discard
         stock2 = Stock()
         remaining2 = {"flour": 1, "butter": 1, "fruit": 1}
@@ -22,10 +25,13 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(stock2.discarded(remaining2), expected2)
 
     def test_closing_cash_for_no_sales(self):
+        """veryfy that wages, rent, and closing cash on a week without sale is calculated correctly"""
         bakery1 = Bakery()
-        decision1 = {"workforce": 1,
-                     "sales":{"loaf":0, "bun":0, "slice":0},
-                     "purchases":{"flour":0, "butter":0, "fruit":0}}
+        decision1 = {
+            "workforce": 1,
+            "sales":{"loaf":0, "bun":0, "slice":0},
+            "purchases":{"flour":0, "butter":0, "fruit":0}
+        }
         demand1 = {"loaf":1, "bun":0, "slice":0}
 
         expected_wage = 10000
@@ -40,11 +46,14 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(record["rent"], expected_rent)
 
     def test_if_cash_zero_bankrupt(self):
+        """Verify that reaching zero cash after trading does not cause bankruptcy"""
         # test1: getting zero cash after Bakery.step()
         bakery1 = Bakery(initial_cash=15000)
-        decision1 = {"workforce": 1,
-                     "sales":{"loaf":0, "bun":0, "slice":0},
-                     "purchases":{"flour":0, "butter":0, "fruit":0}}
+        decision1 = {
+            "workforce": 1,
+            "sales":{"loaf":0, "bun":0, "slice":0},
+            "purchases":{"flour":0, "butter":0, "fruit":0}
+        }
         demand1 = {"loaf":1, "bun":0, "slice":0}
 
         bakery1.step(decision1, demand1)
@@ -54,6 +63,7 @@ class TestIssue(unittest.TestCase):
         self.assertFalse(bakery1.is_stopped())
 
     def test_if_cash_zero_start_bankrupt(self):
+        """Verify that zero initial cash does not cause bankruptcy"""
         # test2: starting from cash 0
         bakery2 = Bakery(initial_cash=0)
         # test2: checking bankrupcy, cash state, model running state after Bakery.step()
@@ -62,6 +72,7 @@ class TestIssue(unittest.TestCase):
         self.assertFalse(bakery2.is_stopped())
 
     def test_boundary_bankrupcy(self):
+        """Verify that a negative cash balance of one penny(boundary) causes bankruptcy"""
         # test3: boundary check
         bakery3 = Bakery(initial_cash=14999)
         decision3 = {"workforce": 1,
@@ -76,11 +87,14 @@ class TestIssue(unittest.TestCase):
         self.assertTrue(bakery3.is_stopped())
 
     def test_overall_accounting(self):
+        """Verify weekly revenue, cash, labour usage and closing stock calculations"""
         bakery = Bakery()
 
-        decision = {"workforce": 1,
-                    "sales": {"loaf": 1, "bun": 0, "slice": 0},
-                    "purchases": {"flour": 0, "butter": 0, "fruit": 0}}
+        decision = {
+            "workforce": 1,
+            "sales": {"loaf": 1, "bun": 0, "slice": 0},
+            "purchases": {"flour": 0, "butter": 0, "fruit": 0}
+        }
         demand = {"loaf": 1, "bun": 0, "slice": 0}
 
         expected_stock = {"flour": 996, "butter": 360, "fruit": 320}
@@ -97,11 +111,14 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(record["purchases_cost"], 0)
 
     def test_consecutive_weeks(self):
+        """Verify that cash, stock and week numbers carry forward correctly between weeks"""
         bakery = Bakery()
 
-        decision = {"workforce": 1,
-                    "sales": {"loaf": 1, "bun": 0, "slice": 0},
-                    "purchases": {"flour": 0, "butter": 0, "fruit": 0}}
+        decision = {
+            "workforce": 1,
+            "sales": {"loaf": 1, "bun": 0, "slice": 0},
+            "purchases": {"flour": 0, "butter": 0, "fruit": 0}
+        }
         demand = {"loaf": 1, "bun": 0, "slice": 0}
 
         # week1

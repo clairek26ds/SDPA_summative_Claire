@@ -4,6 +4,7 @@ from product import PRODUCTS
 
 
 class Order:
+    """Check each order according to the frame and manage its status"""
     def __init__(self, id, product_id, quantity, collection_week):
         if not isinstance(id, str) or not id or id != id.strip():
             raise ValueError("Invalid order ID")
@@ -16,7 +17,9 @@ class Order:
         self.status = "pending"
 
     def fulfilled(self):
+        """update the status of fulfilled order"""
         self.status = "fulfilled"
 
     def missed(self):
+        """update the status of missed order"""
         self.status = "missed"

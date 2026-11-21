@@ -4,7 +4,10 @@ from stock import Stock
 from ingredient import INGREDIENTS
 
 class TestIssue(unittest.TestCase):
+    """Test whether the state preserved and recoverd after rejected weekly decision"""
+
     def test_rejected_decision_changing_stocks(self):
+        """verifying that insufficient ingredients cause rejection without changing bakery state"""
         too_much_bread = Bakery(initial_stock={"flour": 10, "butter": 10, "fruit": 10})
         # making copy of initial states
         initial_stock = too_much_bread.get_stock().copy()
@@ -13,9 +16,11 @@ class TestIssue(unittest.TestCase):
         initial_history = too_much_bread.get_history()
 
         # decision to make more than stock ingredients
-        decision1 = {"workforce": 1,
-                     "sales": {"loaf": 2, "bun": 2, "slice": 1},
-                     "purchases": {"flour": 0, "butter": 0, "fruit": 0}}
+        decision1 = {
+            "workforce": 1,
+            "sales": {"loaf": 2, "bun": 2, "slice": 1},
+            "purchases": {"flour": 0, "butter": 0, "fruit": 0}
+        }
         demand1 = {"loaf": 10, "bun": 10, "slice": 10}
 
         # testing whether the rejected decision due to lack of ingredients changes bakery state
@@ -28,6 +33,7 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(too_much_bread.get_history(), initial_history)
 
     def test_purchase_exceeding_capacity(self):
+        """verifying that purchase exceeding stock capacity is rejected without changing bakery state"""
         too_much_purchase = Bakery()
         # making copy of initial states
         initial_stock = too_much_purchase.get_stock().copy()
@@ -36,9 +42,11 @@ class TestIssue(unittest.TestCase):
         initial_history = too_much_purchase.get_history()
 
         # decision to buy more than stock capacity
-        decision1 = {"workforce": 2,
-                     "sales": {"loaf": 80, "bun": 60, "slice": 30},
-                     "purchases": {"flour": 800, "butter": 300, "fruit": 300}}
+        decision1 = {
+            "workforce": 2,
+            "sales": {"loaf": 80, "bun": 60, "slice": 30},
+            "purchases": {"flour": 800, "butter": 300, "fruit": 300}
+        }
         demand1 = {"loaf": 100, "bun": 80, "slice": 60}
 
         # testing whether the rejected decision due to lack of capacity changes bakery state
@@ -51,6 +59,7 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(too_much_purchase.get_history(), initial_history)
 
     def test_purchase_exceeding_budget(self):
+        """verifying that unaffordable purchase is rejected without changing bakery state"""
         too_much_purchase = Bakery(initial_cash=1000)
         # making copy of initial states
         initial_stock = too_much_purchase.get_stock().copy()
@@ -59,9 +68,11 @@ class TestIssue(unittest.TestCase):
         initial_history = too_much_purchase.get_history()
 
         # decision to buy more than budget
-        decision1 = {"workforce": 2,
-                     "sales": {"loaf": 0, "bun": 100, "slice": 0},
-                     "purchases": {"flour": 0, "butter": 100, "fruit": 0}}
+        decision1 = {
+            "workforce": 2,
+            "sales": {"loaf": 0, "bun": 100, "slice": 0},
+            "purchases": {"flour": 0, "butter": 100, "fruit": 0}
+        }
         demand1 = {"loaf": 20, "bun": 200, "slice": 50}
 
         # testing whether the rejected decision due to purchase exceeding budget changes bakery state
@@ -74,6 +85,7 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(too_much_purchase.get_history(), initial_history)    
 
     def test_after_rejected_decision(self):
+        """verifying that a valid decision after a rejected one can be processed correctly"""
         decision_over_demand = Bakery()
         
         initial_stock = decision_over_demand.get_stock().copy()
@@ -82,9 +94,11 @@ class TestIssue(unittest.TestCase):
         initial_history = decision_over_demand.get_history()
 
         # decision to produce more than demand
-        decision1 = {"workforce": 2,
-                     "sales": {"loaf": 50, "bun": 20, "slice": 30},
-                     "purchases": {"flour": 0, "butter": 0, "fruit": 0}}
+        decision1 = {
+            "workforce": 2,
+            "sales": {"loaf": 50, "bun": 20, "slice": 30},
+            "purchases": {"flour": 0, "butter": 0, "fruit": 0}
+        }
         demand1 = {"loaf": 20, "bun": 30, "slice": 10}
 
         # testing whether the rejected decision due to make more than demand changes bakery state
@@ -97,9 +111,11 @@ class TestIssue(unittest.TestCase):
         self.assertEqual(decision_over_demand.get_history(), initial_history)       
 
         # valid decision
-        decision2 = {"workforce": 1,
-                     "sales": {"loaf": 10, "bun": 10, "slice": 10},
-                     "purchases": {"flour": 0, "butter": 0, "fruit": 0}}
+        decision2 = {
+            "workforce": 1,
+            "sales": {"loaf": 10, "bun": 10, "slice": 10},
+            "purchases": {"flour": 0, "butter": 0, "fruit": 0}
+        }
         demand2 = {"loaf": 20, "bun": 30, "slice": 10}
 
         expected_stock = {"flour": 920, "butter": 342, "fruit": 304}
